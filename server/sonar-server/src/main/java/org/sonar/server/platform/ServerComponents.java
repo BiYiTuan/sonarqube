@@ -28,7 +28,6 @@ import javax.annotation.Nullable;
 
 import org.sonar.api.config.EmailSettings;
 import org.sonar.api.issue.action.Actions;
-import org.sonar.api.platform.ComponentContainer;
 import org.sonar.api.profiles.AnnotationProfileParser;
 import org.sonar.api.profiles.XMLProfileParser;
 import org.sonar.api.profiles.XMLProfileSerializer;
@@ -64,6 +63,8 @@ import org.sonar.core.persistence.DefaultDatabase;
 import org.sonar.core.persistence.MyBatis;
 import org.sonar.core.persistence.SemaphoreUpdater;
 import org.sonar.core.persistence.SemaphoresImpl;
+import org.sonar.core.platform.ComponentContainer;
+import org.sonar.core.platform.PluginLoader;
 import org.sonar.core.purge.PurgeProfiler;
 import org.sonar.core.qualitygate.db.ProjectQgateAssociationDao;
 import org.sonar.core.qualitygate.db.QualityGateConditionDao;
@@ -222,9 +223,8 @@ import org.sonar.server.platform.ws.UpgradesSystemWsAction;
 import org.sonar.server.plugins.InstalledPluginReferentialFactory;
 import org.sonar.server.plugins.PluginDownloader;
 import org.sonar.server.plugins.ServerExtensionInstaller;
-import org.sonar.server.plugins.ServerPluginJarInstaller;
-import org.sonar.server.plugins.ServerPluginJarsInstaller;
 import org.sonar.server.plugins.ServerPluginRepository;
+import org.sonar.server.plugins.ServerPluginUnzipper;
 import org.sonar.server.plugins.UpdateCenterClient;
 import org.sonar.server.plugins.UpdateCenterMatrixFactory;
 import org.sonar.server.plugins.ws.AvailablePluginsWsAction;
@@ -518,10 +518,10 @@ class ServerComponents {
       PlatformRubyBridge.class,
 
       // plugins
-      ServerPluginJarsInstaller.class,
-      ServerPluginJarInstaller.class,
-      InstalledPluginReferentialFactory.class,
       ServerPluginRepository.class,
+      ServerPluginUnzipper.class,
+      PluginLoader.class,
+      InstalledPluginReferentialFactory.class,
       ServerExtensionInstaller.class,
 
       // depends on plugins
