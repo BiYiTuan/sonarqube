@@ -48,6 +48,7 @@ public class ComputationSteps {
       PersistEventsStep.class,
       PersistDuplicationMeasuresStep.class,
       PersistFileSourcesStep.class,
+      PersistTestsStep.class,
 
       // Switch snapshot and purge
       SwitchSnapshotStep.class,
@@ -58,6 +59,7 @@ public class ComputationSteps {
       ApplyPermissionsStep.class,
       IndexIssuesStep.class,
       IndexSourceLinesStep.class,
+      IndexTestsStep.class,
       IndexViewsStep.class,
 
       // Purge of removed views has to be done after Views has been indexed
