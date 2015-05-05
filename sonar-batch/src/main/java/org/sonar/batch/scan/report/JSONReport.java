@@ -42,16 +42,11 @@ import org.sonar.api.rule.RuleKey;
 import org.sonar.api.utils.SonarException;
 import org.sonar.api.utils.text.JsonWriter;
 import org.sonar.batch.issue.IssueCache;
-import org.sonar.batch.repository.user.User;
+import org.sonar.batch.protocol.input.BatchInput;
 import org.sonar.batch.repository.user.UserRepository;
 import org.sonar.batch.scan.filesystem.InputPathCache;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Set;
@@ -122,7 +117,7 @@ public class JSONReport implements Reporter {
       writeJsonIssues(json, ruleKeys, userLogins);
       writeJsonComponents(json);
       writeJsonRules(json, ruleKeys);
-      Collection<User> users = userRepository.loadFromWs(new ArrayList<String>(userLogins));
+      Collection<BatchInput.User> users = userRepository.loadFromWs(new ArrayList<String>(userLogins));
       writeUsers(json, users);
       json.endObject().close();
 
@@ -214,13 +209,13 @@ public class JSONReport implements Reporter {
     json.endArray();
   }
 
-  private void writeUsers(JsonWriter json, Collection<User> users) throws IOException {
+  private void writeUsers(JsonWriter json, Collection<BatchInput.User> users) throws IOException {
     json.name("users").beginArray();
-    for (User user : users) {
+    for (BatchInput.User user : users) {
       json
         .beginObject()
-        .prop("login", user.login())
-        .prop("name", user.name())
+        .prop("login", user.getLogin())
+        .prop("name", user.getName())
         .endObject();
     }
     json.endArray();
