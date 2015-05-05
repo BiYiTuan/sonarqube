@@ -55,6 +55,13 @@ public class MeasureDtoTest {
   }
 
   @Test
+  public void byte_data() throws Exception {
+    byte[] data = new byte[]{0x4f};
+    sut.setByteData(data);
+    assertThat(sut.getByteData()).isEqualTo(data);
+  }
+
+  @Test
   public void value_with_text_over_4000_characters() throws Exception {
     assertThat(sut.setData(Strings.repeat("1", 4001)).getData()).isNotNull();
   }
