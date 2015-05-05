@@ -20,9 +20,10 @@
 
 package org.sonar.server.platform.ws;
 
-import com.google.common.io.Resources;
 import org.sonar.api.server.ws.RailsHandler;
 import org.sonar.api.server.ws.WebService;
+
+import com.google.common.io.Resources;
 
 public class ServerWs implements WebService {
 
@@ -32,26 +33,9 @@ public class ServerWs implements WebService {
       .setDescription("Get system properties and upgrade db")
       .setSince("2.10");
 
-    defineIndexAction(controller);
     defineSetupAction(controller);
 
     controller.done();
-  }
-
-  private void defineIndexAction(NewController controller) {
-    NewAction action = controller.createAction("index")
-      .setDescription("Get the server status:" +
-        "<ul>" +
-        "<li>UP</li>" +
-        "<li>DOWN (generally for database connection failures)</li>" +
-        "<li>SETUP (if the server must be upgraded)</li>" +
-        "<li>MIGRATION_RUNNING (the upgrade process is currently running)</li>" +
-        "</ul>")
-      .setSince("2.10")
-      .setHandler(RailsHandler.INSTANCE)
-      .setResponseExample(Resources.getResource(this.getClass(), "example-index.json"));
-
-    RailsHandler.addFormatParam(action);
   }
 
   private void defineSetupAction(NewController controller) {

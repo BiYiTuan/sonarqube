@@ -35,16 +35,6 @@ class Api::ServerController < Api::ApiController
     render :text => Java::OrgSonarServerPlatform::Platform.getServer().getVersion()
   end
 
-  def index
-    hash={:id => Java::OrgSonarServerPlatform::Platform.getServer().getId(), :version => Java::OrgSonarServerPlatform::Platform.getServer().getVersion()}
-    complete_with_status(hash)
-    respond_to do |format|
-      format.json{ render :json => jsonp(hash) }
-      format.xml { render :xml => hash.to_xml(:skip_types => true, :root => 'server') }
-      format.text { render :text => text_not_supported}
-    end
-  end
-
   def setup
     verify_post_request
     manager=DatabaseMigrationManager.instance
@@ -107,20 +97,6 @@ class Api::ServerController < Api::ApiController
       hash[prop[0].to_s]=prop[1].to_s
     end
     hash
-  end
-
-  def complete_with_status(hash)
-    if DatabaseMigrationManager.instance.is_sonar_access_allowed?
-      hash[:status]='UP'
-    elsif DatabaseMigrationManager.instance.migration_running?
-      hash[:status]='MIGRATION_RUNNING'
-    elsif DatabaseMigrationManager.instance.requires_migration?
-      hash[:status]='SETUP'
-    else
-      # migration failed or not connected to the database 
-      hash[:status]='DOWN'
-      hash[:status_msg]=DatabaseMigrationManager.instance.message
-    end
   end
 
   def set_cache_buster
